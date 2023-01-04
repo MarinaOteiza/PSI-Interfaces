@@ -1,5 +1,6 @@
 package appUsr;
 
+import Interfaces.*;
 import dataUsr.*;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import Productes.*;
 import ControlFitxers.*;
 import javax.swing.JOptionPane;
 import Main.*;
+import dataUsr.*;
 /**
  *
  * @author Marina Oteiza
@@ -22,7 +24,7 @@ public class RegUser {
         boolean exit = false;
         LlistaUser llista = new LlistaUser(100);
         LlistaProductes llista1 = new LlistaProductes(500); //500 como max elem
-
+        new UserInterfaz(llista);
         do {
             menu();
             try {
@@ -314,40 +316,11 @@ public class RegUser {
         }
     }
 
-    /*private static void registro(LlistaUser llista) {
-        //Pedimos los datos para registrar a un nuevo usuario
-        System.out.println("REGISTRO NUEVO ");
-        String alias = null, correo;
-        int codiPost = -1;
-        User nou;
-
-        System.out.println("Introduce un alias: ");
-        try {
-            alias = teclat.nextLine();
-            if (llista.usuarioRegistrado(alias))
-                throw new Exception(); //Evitamos que el usuario introduzca una alias repetido
-        } catch (Exception e) {
-            System.out.println("Ese usuario ya ha sido ocupado\nIntroduzca otro usuario");
-        }
-        System.out.println("CORREO ELECTRONICO: ");
-        correo = teclat.nextLine();
-        System.out.println("CODIGO POSTAL: ");  //Nos aseguramos de que el código postal sea un valor numérico
-        do {
-            try {
-                codiPost = Integer.parseInt(teclat.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("El codigo postal debe ser un valor numerico\n" + "ERROR: " + e + "\nIntroduzca el codigo postal");
-            }
-        } while (codiPost == -1);
-
-        nou = new User(alias, correo, codiPost);
-        llista.nuevoUsr(nou);
-        SumarUsuario(nou);
-        if (llista.usuarioRegistrado(alias)) System.out.println("Usuario guardado correctamente");
-    }*/
 
     private static void eliminaBien(LlistaUser llista) {
-        String a = pedirAlias(llista), codeBien = null;
+        //String a = pedirAlias(llista),
+        String codeBien = null;
+        String a=null;//TODO ÁITOR: paso el alias desde mi interfaz a Main()
         MostrarProductes(a, llista);
         try {
             System.out.println("Introduce el codigo del bien que quieras eliminar");
@@ -412,17 +385,6 @@ public class RegUser {
 
     private static void serviciosMasIntercamb() {
 
-    }
-
-    private static String pedirAlias(LlistaUser llista) {
-        String a;
-        do {
-            System.out.println("Introduce un alias: ");
-            a = teclat.nextLine();
-            if (!llista.usuarioRegistrado(a)) System.out.println("Usuario no encontrado, compruebe que lo " +
-                    "haya escrito correctamente\n");
-        } while (!llista.usuarioRegistrado(a));
-        return a;
     }
 
     private static Productes pedirProducto(LlistaUser llista, String usuario,String a) {

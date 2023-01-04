@@ -16,7 +16,8 @@ public class Main extends JFrame{
     private String nomU,correo;                      //Aitor
     private LlistaUser llista;
     private JFrame frame;
-    public Main(LlistaUser llista){
+    public Main(LlistaUser llista, String nom){
+        nomU=nom;
         this.llista=llista;
 
         JButton button = new JButton("SumarPeticion");
@@ -119,7 +120,7 @@ public class Main extends JFrame{
     //=====================================================================================================
     public static void main(String[] args) {
         LlistaUser llista = new LlistaUser(100);
-        new Main(llista);
+        new Main(llista, null); //TODO ÁITOR: ya llamo a Main() desde mi interfaz
     }
 
 }

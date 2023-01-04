@@ -1,18 +1,20 @@
-package InterfaceUser;
+package Interfaces;
 
 import dataUsr.*;
+import Main.*;
+
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.event.ActionEvent;
 
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+
 
 
 public class UserInterfaz extends JFrame {
@@ -22,10 +24,8 @@ public class UserInterfaz extends JFrame {
     private String nom, correo;
     private int codiPostal;
 
-    public UserInterfaz() {
+    public UserInterfaz(LlistaUser llista) {
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 25, 25));
-
-
         panellBotons.setLayout(new FlowLayout());
         b1.setBackground(Color.WHITE);
         b2.setBackground(Color.WHITE);
@@ -38,10 +38,10 @@ public class UserInterfaz extends JFrame {
                 panellBotons.remove(b1);
                 panellBotons.remove(b2);
                 if (e.getSource() == b1){
-                    pedirAlias();
+                    logInUser(llista);
                 }
                 else{
-                    newRegister();
+                    newRegister(llista);
                 }
             }
 
@@ -83,9 +83,10 @@ public class UserInterfaz extends JFrame {
         //setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        new Main(llista, nom);
     }
 
-    private void newRegister() {
+    private void newRegister(LlistaUser llista) {
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 25, 25));
         JButton fin= new JButton("Siguiente");
         this.add(fin);
@@ -112,16 +113,20 @@ public class UserInterfaz extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try{
-                    if(nom1.getText().equals("")||nom2.getText().equals("")||nom3.getText().equals("")) throw new Exception();
-                    else{
-                        nom=nom1.getText();correo=nom2.getText(); codiPostal= Integer.parseInt(nom3.getText());
-                        fin.setVisible(false);
-                        etiqueta2.setVisible(false);etiqueta1.setVisible(false);etiqueta3.setVisible(false);
-                        nom2.setVisible(false);nom1.setVisible(false);nom3.setVisible(false);
-                        j.setText("Valores guardados correctamente");
-                    }
-                }catch(Exception exc){
+                    if(nom1.getText().equals("")||nom2.getText().equals("")||nom3.getText().equals("")) throw new ArithmeticException();
+                    else if(llista.usuarioRegistrado(nom1.getText())) throw new Exception();//TODO:controlar también que el codiPostal sea numérico
+                        else{
+                            nom=nom1.getText();correo=nom2.getText(); codiPostal= Integer.parseInt(nom3.getText());
+                            fin.setVisible(false);
+                            etiqueta2.setVisible(false);etiqueta1.setVisible(false);etiqueta3.setVisible(false);
+                            nom2.setVisible(false);nom1.setVisible(false);nom3.setVisible(false);
+                            new User(nom,correo,codiPostal);
+                            j.setText("Valores guardados correctamente");
+                        }
+                }catch(ArithmeticException exc){
                     j.setText("Todos los campos son obligatorios");
+                }catch (Exception exc){
+                    j.setText("Ese alias no está disponible. Prueba con otro");
                 }
             }
 
@@ -148,9 +153,10 @@ public class UserInterfaz extends JFrame {
 
         fin.addMouseListener(click);
         panellBotons.updateUI();
+
     }
 
-    private void pedirAlias() {
+    private void logInUser(LlistaUser llista) {
         //JPanel alias=new JPanel();
         JLabel mensajeAlias=new JLabel("Introduce tu alias");
         JButton fin= new JButton("Siguiente");
@@ -165,10 +171,9 @@ public class UserInterfaz extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 try{
                     nom=introAlias.getText();
-                    if(nom.equals("marina")||nom.equals("")) throw new Exception();
+                    if(!llista.usuarioRegistrado(nom)||nom.equals("")) throw new Exception();
                     fin.setVisible(false);
                     panellBotons.setVisible(false);
-                    outAlias.setText("Alias correcto");
                 }catch (Exception exc){
                     //System.out.println("");//sout+tab
                     outAlias.setText("Alias incorrecto, vuelve a probar");
@@ -201,53 +206,30 @@ public class UserInterfaz extends JFrame {
         this.add(outAlias);
         panellBotons.updateUI();
     }
-    public void cambioUser(){
-        this.add(new JLabel("Introduce el nuevo alias"), BorderLayout.NORTH);
-        JButton fin= new JButton("Siguiente");
-        fin.setBackground(Color.WHITE);
-        JTextField introAlias=new JTextField(16);
-        JLabel outAlias=new JLabel("");
-        panellBotons.add(introAlias);
-        MouseListener click=new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try{
-                    nom=introAlias.getText();
-                    if(nom.equals("marina")||nom.equals("")) throw new Exception();
-                    fin.setVisible(false);
-                    panellBotons.setVisible(false);
-                    outAlias.setText("Alias correcto");
-                }catch (Exception exc){
-                    //System.out.println("");//sout+tab
-                    outAlias.setText("Alias incorrecto, vuelve a probar");
-                }
-            }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-                fin.setBackground(Color.PINK);
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                fin.setBackground(Color.WHITE);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                fin.setBackground(Color.PINK);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                fin.setBackground(Color.WHITE);
-            }
-        };
-        fin.addMouseListener(click);
-        this.add(panellBotons);
-        this.add(fin);
-        this.add(outAlias);
-        panellBotons.updateUI();
+    public String getNomActual() {
+        return nom;
     }
+
+    public void setNomActual(String nom) {
+        this.nom = nom;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public int getCodiPostal() {
+        return codiPostal;
+    }
+
+    public void setCodiPostal(int codiPostal) {
+        this.codiPostal = codiPostal;
+    }
+
 }
 

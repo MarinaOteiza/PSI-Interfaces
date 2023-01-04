@@ -1,4 +1,8 @@
 package ControlFitxers;
+
+import Productes.Bienes;
+import Productes.LlistaProductes;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -7,168 +11,138 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class Fitxer {
-        public Fitxer() {
-            boolean modificat= false;
+
+    public LlistaProductes LeerBienes(String NomFitxer) throws IOException {
+        int MaxLin = 500000;
+        LlistaProductes nova = new LlistaProductes(MaxLin);
+        Scanner lectura = new Scanner(new File(NomFitxer));
+        Scanner part;
+        // dividir información del fichero//
+        int   dat1;
+        String descripcio, frase, nom,codi;
+        Data off;
+        double ancho, alto, largo, peso;
+
+        while (lectura.hasNext()) {
+            frase = lectura.nextLine();
+            part = new Scanner(frase);
+            part.useDelimiter(";");
+            part.useLocale(Locale.ENGLISH);
+            nom= part.next();
+            codi = part.next();
+            descripcio = part.next();
+            ancho = part.nextDouble();
+            alto = part.nextDouble();
+            largo = part.nextDouble();
+            peso = part.nextDouble();
+            dat1 = part.nextInt();
+            off = new Data(dat1);
+            Bienes benou = new Bienes(nom, codi, descripcio, off,  ancho, alto, largo, peso,"Fisic");
+            nova.afegirProducte(benou);
+            lectura.hasNext();
 
         }
+        lectura.close();
+        return nova;
 
+    }
+    /**
+     * Procediment per a llegir un  archiu
+     *  passa la informació a  una llista de productes
+     * @param NomFitxer : passem el nom del Fitxer que conté la informació
+     * @return Nova: LLista de Productes amb la informació
+     */
 
-        public  ListaBienes LeerBienes(String nomFitxer) throws IOException {
-            int MaxLin = 10000;
-            ListaBienes novallista = new ListaBienes(MaxLin); /* crear lista */
-
-            Scanner lectura =new Scanner(new File(nomFitxer));
-            Scanner part;  /* para dividir información */
-
-            String  descripcio, tipus, frase;
-            int altura, amplitud, fons,data1,data2, cod;
-            float pes;
-            Data off, intercanvi;
-
-            /* variables a separar en el fichero*/
-
-            while (lectura.hasNext()) {
-                frase=lectura.nextLine();   /* leemos linea por linea*/
-                part=new Scanner(frase);
-                part.useDelimiter(";");
-                part.useLocale(Locale.ENGLISH);
-
-                cod=part.nextInt();
-                descripcio=part.next();
-                tipus=part.next();
-                altura=part.nextInt();
-                amplitud=part.nextInt(); /* altura, amplitud, fons en centimetres*/
-                fons=part.nextInt();
-                pes=part.nextFloat(); /* peso en kg*/
-
-                data1=part.nextInt();
-                data2=part.nextInt();
-
-                off= new Data(data1);
-                if (data2 != 0) {
-                    intercanvi = new Data(data2);
-                }
-                else intercanvi= new Data();
-
-                Bienes benou= new Bienes(cod, descripcio,tipus, off,altura, amplitud, fons, pes);
-                benou.afegirIntercanvi(intercanvi);
-                novallista.afegirBien(benou);
-                System.out.println(frase);
-                lectura.hasNext();
-            }
-
-            lectura.close();
-            return novallista;
+    public LlistaProductes LeerProd(String NomFitxer) throws IOException {
+        int MaxLin = 500000;
+        LlistaProductes nova = new LlistaProductes(MaxLin);
+        Scanner lectura = new Scanner(new File(NomFitxer));
+        Scanner part;
+        String code, descrip, frase;
+        Data dataoff;
+        int dt1;
+        while (lectura.hasNext()) {
+            frase = lectura.nextLine();
+            part = new Scanner(frase);
+            part.useDelimiter(";");
+            part.useLocale(Locale.ENGLISH);
+            code = part.next();
+            descrip = part.next();
+            dt1 = part.nextInt();
+            dataoff = new Data(dt1);
+            Bienes prod= new Bienes(code,descrip,dataoff,"Fisic")     ;
+            nova.afegirProducte(prod);
+            lectura.hasNext();
         }
-        /* procediment per separar la informació en una llista de bens;
-        Va tota la informació del producte;
-         /*
-         */
-
-
-        public  void ModFitxerBens(ListaBienes n1) throws IOException {
-
-            try (BufferedWriter escriptura = new BufferedWriter(new FileWriter("DadesBens.txt"))) {
-                String descripcio, tipus, frase;
-                int altura, amplitud, fons, codi;
-                float pes;
-                Data off, intercanvi;
-                int i;
-                for ( i=0; i<n1.getnumBienes(); i++) {
-
-                    codi=n1.getLLista(i).GetCod();
-                    descripcio=n1.getLLista(i).GetDesc();
-                    tipus=n1.getLLista(i).GetTipus();
-                    altura=n1.getLLista(i).GetAlt();
-                    amplitud=n1.getLLista(i).GetAmp();
-                    fons=n1.getLLista(i).GetFons();
-                    pes=n1.getLLista(i).GetPes();
-                    off=n1.getLLista(i).GetOff();
-                    intercanvi=n1.getLLista(i).GetInt();
-
-
-                    frase=(codi+";"+descripcio+";"+tipus+";"+altura+";"+amplitud+";"+fons+";"+pes+";"+off+";"+intercanvi+";");
-                    escriptura.write(frase);
-
-                    escriptura.newLine();
-                }
-                escriptura.close();
-
-                /*la informació de la llista es gudrdarà en un fitxer*/
-            }
-        }
-
-        public LlistaServeis LeerServicios(String nomFitxer) throws IOException {
-            int MaxLin = 10000;
-            LlistaServeis novallista = new LlistaServeis(MaxLin); /* crear lista */
-            Scanner lectura =new Scanner(new File(nomFitxer));
-            Scanner part;  /* para dividir información */
-
-            String  titol, frase;
-            int intercanvis, dat;
-            boolean est;
-            Data dataFi;
-
-            /* variables a separar en el fichero*/
-
-            while (lectura.hasNext()) {
-                frase=lectura.nextLine();   /* leemos linea por linea*/
-                part=new Scanner(frase);
-                part.useDelimiter(";");
-                part.useLocale(Locale.ENGLISH);
-                titol=part.next();
-                intercanvis=part.nextInt();
-                est= part.nextBoolean();
-                dat=part.nextInt();
-                dataFi= new Data();
-                Servei serveinou= new Servei(dataFi, titol, est, intercanvis);
-                novallista.afegirServei(serveinou);
-                System.out.println(frase);
-                lectura.hasNext();
-            }
-
-            lectura.close();
-            return novallista;
-        }
-
-
-    public  void ModFitxerServeis(LlistaServeis n1, String NomFitx) throws IOException {
-
-        try (BufferedWriter escriptura = new BufferedWriter(new FileWriter(NomFitx))) {
-            String descripcio, tipus, frase;
-            int altura, amplitud, fons, codi;
-            float pes;
-            Data off, intercanvi;
-            int i;
-            for ( i=0; i<n1.getnumBienes(); i++) {
-
-                codi=n1.getLLista(i).GetCod();
-                descripcio=n1.getLLista(i).GetDesc();
-                tipus=n1.getLLista(i).GetTipus();
-                altura=n1.getLLista(i).GetAlt();
-                amplitud=n1.getLLista(i).GetAmp();
-                fons=n1.getLLista(i).GetFons();
-                pes=n1.getLLista(i).GetPes();
-                off=n1.getLLista(i).GetOff();
-                intercanvi=n1.getLLista(i).GetInt();
-
-
-                frase=(codi+";"+descripcio+";"+tipus+";"+altura+";"+amplitud+";"+fons+";"+pes+";"+off+";"+intercanvi+";");
-                escriptura.write(frase);
-
-                escriptura.newLine();
-            }
-            escriptura.close();
-         }
+        lectura.close();
+        return nova;
     }
 
 
+    public void ModificaFitxerProd(LlistaProductes n1, String NomFitxer) throws IOException {
 
+        try (BufferedWriter escriptura = new BufferedWriter(new FileWriter(NomFitxer))) {
+            int  intercanvis, dat1, dat2;
+            String descripcio, frase, codi,nom, tipus;
+            String off;
+            int i;
+            for ( i=0; i<n1.getnumProd(); i++) {
+                codi=n1.getList(i).getCode();
+                descripcio=n1.getList(i).getDescrip();
+                off=n1.getList(i).getofString();
+                frase=(codi+";"+descripcio+";" +off+";");
+                escriptura.write(frase);
+                escriptura.newLine();
+            }
+            escriptura.close();
+        }
+    }
+    /**
+     *Procediment per a escriure una llista de productes a un archiu
+     *      * @param NomFitxer : passem el nom del Fitxer que conté la informació
+     *      * @param n1: llista de productes
+     */
+    public LlistaProductes LeerServicios(String NomFitxer) throws IOException {
+        int MaxLin = 500000;
+        LlistaProductes nova = new LlistaProductes(MaxLin);
+        Scanner lectura = new Scanner(new File(NomFitxer));
+        Scanner part;
+        // dividir información del fichero//
+        int codi, intercanvis, dat1, dat2, dt3;
+        String descripcio, frase;
+        Data off, Inter, Des;
+        boolean estat;
 
+        while (lectura.hasNext()) {
+            frase = lectura.nextLine();
+            part = new Scanner(frase);
+            part.useDelimiter(";");
+            part.useLocale(Locale.ENGLISH);
+            codi = part.nextInt();
+            descripcio = part.next();
+            estat = part.nextBoolean();
+            intercanvis = part.nextInt();
+            dat1 = part.nextInt();
+            dat2 = part.nextInt();
+            dt3 = part.nextInt();
+            off = new Data(dat1);
+            if (dat2 != 0) {
+                Inter = new Data(dat2);
+            } else Inter = new Data();
+            Des= new Data(dt3);
+            //Serveis Servei = new Serveis(codi, descripcio, off, Inter, estat, intercanvis,Des,"Servei");
+            //nova.afegirProducte(Servei);
+            lectura.hasNext();
+        }
+        lectura.close();
+        return nova;
+    }
 
+/**
+ * Procediment per a llegir un archiu
+ *  passa la informació a  una llista de productes
+ * @param NomFitxer : passem el nom del Fitxer que conté la informació
+ * @return Nova: LLista de Productes amb la informació
+ */
 
 }
-
-
-
-

@@ -1,8 +1,8 @@
 package ControlFitxers;
 
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.IOException;
 
 
 public class ModificarBinari extends ObjectOutputStream {
@@ -22,8 +22,8 @@ public class ModificarBinari extends ObjectOutputStream {
         super.writeStreamHeader();
         reset();
     }
-    /* para añadir el  texto sin borrar el anterior
-    * reset de la cabezera para añadir continuamente */
+    /* para añadir   texto sin borrar el anterior
+     * reset de la cabezera para añadir continuamente */
 
 
 }

@@ -83,7 +83,6 @@ public class UserInterfaz extends JFrame {
         //setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        new Main(llista, nom);
     }
 
     private void newRegister(LlistaUser llista) {
@@ -114,7 +113,7 @@ public class UserInterfaz extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 try{
                     if(nom1.getText().equals("")||nom2.getText().equals("")||nom3.getText().equals("")) throw new ArithmeticException();
-                    else if(llista.usuarioRegistrado(nom1.getText())) throw new Exception();//TODO:controlar también que el codiPostal sea numérico
+                    else if(llista.usuarioRegistrado(nom1.getText())) throw new Exception();
                         else{
                             nom=nom1.getText();correo=nom2.getText(); codiPostal= Integer.parseInt(nom3.getText());
                             fin.setVisible(false);
@@ -122,9 +121,13 @@ public class UserInterfaz extends JFrame {
                             nom2.setVisible(false);nom1.setVisible(false);nom3.setVisible(false);
                             new User(nom,correo,codiPostal);
                             j.setText("Valores guardados correctamente");
+                            new Main(llista, nom);
+                            setVisible(false);
                         }
                 }catch(ArithmeticException exc){
                     j.setText("Todos los campos son obligatorios");
+                }catch(NumberFormatException exc){
+                    j.setText("EL código postal debe tener un valor numerico");
                 }catch (Exception exc){
                     j.setText("Ese alias no está disponible. Prueba con otro");
                 }
@@ -171,9 +174,11 @@ public class UserInterfaz extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 try{
                     nom=introAlias.getText();
-                    if(!llista.usuarioRegistrado(nom)||nom.equals("")) throw new Exception();
+                    if(llista.usuarioRegistrado(nom)||nom.equals("")) throw new Exception();
                     fin.setVisible(false);
                     panellBotons.setVisible(false);
+                    new Main(llista, nom);
+                    setVisible(false);
                 }catch (Exception exc){
                     //System.out.println("");//sout+tab
                     outAlias.setText("Alias incorrecto, vuelve a probar");

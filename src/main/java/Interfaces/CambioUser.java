@@ -26,15 +26,16 @@ public class CambioUser extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 try{
                     nom=introAlias.getText();
-                    if(!llista.usuarioRegistrado(nom)||nom.equals("")) throw new Exception();
+                    if(llista.usuarioRegistrado(nom)||nom.equals("")) throw new Exception();
                     fin.setVisible(false);
                     panellBotons.setVisible(false);
+                    new Main(llista, nom);
+                    setVisible(false);
                 }catch (Exception exc){
                     //System.out.println("");//sout+tab
                     outAlias.setText("Alias incorrecto, vuelve a probar");
                 }
             }
-
             @Override
             public void mousePressed(MouseEvent e) {
                 fin.setBackground(Color.PINK);
@@ -60,6 +61,5 @@ public class CambioUser extends JFrame{
         this.add(fin);
         this.add(outAlias);
         panellBotons.updateUI();
-        new Main(llista, nom);
     }
 }

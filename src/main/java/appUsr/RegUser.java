@@ -19,13 +19,13 @@ import dataUsr.*;
 public class RegUser {
     static Scanner teclat = new Scanner(System.in);
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         int opcion = 10; //hay que iniciarlo, asi que ponemos un valor cualquiera
         boolean exit = false;
         LlistaUser llista = new LlistaUser(100);
         LlistaProductes llista1 = new LlistaProductes(500); //500 como max elem
         new UserInterfaz(llista);
-        do {
+        /**do {
             menu();
             try {
                 opcion = Integer.parseInt(teclat.nextLine());
@@ -80,8 +80,8 @@ public class RegUser {
                     break;
             }
         } while (!exit);
-        teclat.close();
-    }*/
+        teclat.close();*/
+    }
 
 
     private static void menu() {

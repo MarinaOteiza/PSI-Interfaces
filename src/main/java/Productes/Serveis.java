@@ -1,4 +1,5 @@
 package Productes;
+import ControlFitxers.*;
 
 public class Serveis extends Productes{
     private Data dataOf;
@@ -11,7 +12,7 @@ public class Serveis extends Productes{
     private String nom;
 
     public Serveis(String nom,String code, String descrip, Data dataOf, Data DataDes,String tipus){
-        super(nom,code,descrip,dataOf,tipus);
+        super(code,descrip,dataOf,tipus);
         this.dataDes=null; //creamos una fecha de descativacion
     }
 

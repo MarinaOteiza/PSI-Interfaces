@@ -21,7 +21,7 @@ public class ActionSumarPeticiones extends JDialog {
     private Container cont, cont2;
 
 
-    public ActionSumarPeticiones(LlistaUser llista, JFrame frame){
+    public ActionSumarPeticiones(LlistaUser llista, JFrame frame, String nomM){
         super(frame, "Introducir Peticion");
         info = new JLabel("-¿Cual es el usuario con quien quieres intercambiar y su producto?-");
         nom = new JLabel("Introduce el nombre del usuario: ");
@@ -62,7 +62,7 @@ public class ActionSumarPeticiones extends JDialog {
                 controls.setVisible(false);
                 acceptar.setVisible(false);
                 cancelar.setVisible(false);
-                continuarAction(llista);
+                continuarAction(llista,nomM);
             }
         });
         cancelar.addActionListener( new ActionListener() {
@@ -88,18 +88,10 @@ public class ActionSumarPeticiones extends JDialog {
         setVisible(true);
     }
 
-    private void continuarAction(LlistaUser llista){
+    private void continuarAction(LlistaUser llista,String nomM){
         frame = new JFrame("Introducir nueva peticion");
         infoC = new JLabel("-Introduce tu informacion-");
-        nomC = new JLabel("Introduce tu nombre de usuario: ");
-        nomFC = new JTextField(30);
-        nomFC.addActionListener( new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                nomFU= nomFC.getText();
-                if(!llista.usuarioRegistrado(nomFU))
-                    nomFC.setText("Introduce de nuevo el usuario.");
-            }
-        });
+        this.nomFU=nomM;
         prodC = new JLabel("Introduce el producto que quieres intercambiar: ");
         prodFC = new JTextField(50);
         prodFU= prodFC.getText();
@@ -110,8 +102,6 @@ public class ActionSumarPeticiones extends JDialog {
         preg2.add(info, BorderLayout.NORTH);
 
         controls2.setLayout(new GridLayout(4,2));
-        controls2.add(nomC);
-        controls2.add(nomFC);
         controls2.add(prodC);
         controls2.add(prodFC);
 
@@ -134,6 +124,7 @@ public class ActionSumarPeticiones extends JDialog {
         JPanel botons = new JPanel(new FlowLayout());
         botons.add(acceptar2);
         botons.add(cancelar2);
+        botons.updateUI();
 
         cont2 = getContentPane();
         cont2.add(controls2, BorderLayout.CENTER);

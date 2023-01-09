@@ -1,5 +1,6 @@
 package Main;
 
+import Interfaces.UserInterfaz;
 import Productes.*;
 import dataUsr.*;
 
@@ -7,45 +8,53 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 
 import static appUsr.RegUser.*;
 
 public class Main extends JFrame{
     private static final long serialVersionUID = 1L;
     public JTextArea area = new JTextArea(); //Aitor
-    private String nomU,correo;                      //Aitor
+    private String nomU;                      //Aitor
     private LlistaUser llista;
     private JFrame frame;
-    public Main(LlistaUser llista, String nom){
-        nomU=nom;
-        this.llista=llista;
 
+
+    public Main(LlistaUser llista, String nom){
+        setVisible(false);
+        this.llista=llista;
+        this.nomU=nom;
         JButton button = new JButton("SumarPeticion");
         button.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
-                ActionSumarPeticiones d = new ActionSumarPeticiones(llista,frame);
+                ActionSumarPeticiones d = new ActionSumarPeticiones(llista,frame,nomU);
             }
         });
         JButton button2 = new JButton("Responder Usuario");
-        button.addActionListener(new ActionListener(){
+        button2.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
-                ActionResponderUsu r = new ActionResponderUsu(llista);
+                ActionResponderUsu r = new ActionResponderUsu(llista,frame,nomU);
             }
         });
         JButton button3 = new JButton("Responder Cliente");
-        button.addActionListener(new ActionListener(){
+        button3.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
-                ActionResponderCliente rc = new ActionResponderCliente(llista);
+                ActionResponderCliente rc = new ActionResponderCliente(llista,frame,nomU);
             }
         });
         JButton button4 = new JButton("Mostrar Peticiones");
-        button.addActionListener(new ActionListener(){
+        button4.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
+                button.setVisible(false);
+                button2.setVisible(false);
+                button3.setVisible(false);
+                button4.setVisible(false);
                 MostrarPeticiones(llista);
             }
         });
 
         JPanel botons = new JPanel(new FlowLayout());
+
         botons.add(button);
         botons.add(button2);
         botons.add(button3);
@@ -59,15 +68,6 @@ public class Main extends JFrame{
     }
     //===========================MOSTRAR PETICIONES=============================================================================
     public void afegirTextArea(String s) {
-        JLabel nom = new JLabel("Introduce tu nombre de usuario: ");
-        JTextField nomF = new JTextField(30);
-        nomF.addActionListener( new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String nomU= nomF.getText();
-                if(!llista.usuarioRegistrado(nomU))
-                    nomF.setText("Introduce de nuevo el usuario.");
-            }
-        });
         if(s.equals("Pendientes")){
             peticionesPendintes(llista,nomU,this);
         }else{
@@ -102,6 +102,8 @@ public class Main extends JFrame{
         // Afegim el panell a la finestra.
         this.add(panellBotons, BorderLayout.NORTH);
 
+        panellBotons.updateUI();
+
         // Classe de tractar� l'esdeveniment sobre el bot�.
         ActionMostrarPeticiones accioBoto = new ActionMostrarPeticiones(this);
         // Indiquem que cada bot� utilitzi la classe anterior per tractar l'esdeveniment.
@@ -118,9 +120,5 @@ public class Main extends JFrame{
         setVisible(true);
     }
     //=====================================================================================================
-    public static void main(String[] args) {
-        LlistaUser llista = new LlistaUser(100);
-        new Main(llista, null); //TODO ÁITOR: ya llamo a Main() desde mi interfaz
-    }
 
 }

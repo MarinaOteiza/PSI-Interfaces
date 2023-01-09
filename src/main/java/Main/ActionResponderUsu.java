@@ -19,20 +19,12 @@ public class ActionResponderUsu extends JDialog {
     JPanel controls = new JPanel();
     JPanel preg= new JPanel();
     private boolean ok;
-    public ActionResponderUsu(LlistaUser llista){
-        frame = new JFrame("Responder peticion");
+    public ActionResponderUsu(LlistaUser llista, JFrame frame, String nomM){
+        super(frame,"Responder peticion");
         info = new JLabel("-Introduce tu informacion personal-");
-        nom = new JLabel("Introduce tu nombre de usuario: ");
-        nomF = new JTextField(30);
-        nomF.addActionListener( new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                nomU= nomF.getText();
-                if(!llista.usuarioRegistrado(nomU))
-                    nomF.setText("Introduce de nuevo el usuario.");
-            }
-        });
+        this.nomU=nomM;
         MostrarProductes(nomU, llista);
-        prod = new JLabel("Introduce el codigo: ");
+        prod = new JLabel("Introduce el codigo de tu producto: ");
         prodF = new JTextField(50);
         prodF.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -47,8 +39,6 @@ public class ActionResponderUsu extends JDialog {
         preg.add(info, BorderLayout.NORTH);
 
         controls.setLayout(new GridLayout(4,2));
-        controls.add(nom);
-        controls.add(nomF);
         controls.add(prod);
         controls.add(prodF);
 
@@ -79,10 +69,9 @@ public class ActionResponderUsu extends JDialog {
         cont.add(botons, BorderLayout.SOUTH);
 
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        setSize(300,300);
-        frame.setVisible(true);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        pack();
+        setVisible(true);
     }
 
 }

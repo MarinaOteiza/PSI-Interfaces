@@ -19,18 +19,10 @@ public class ActionResponderCliente extends JDialog {
     JPanel controls = new JPanel();
     JPanel preg= new JPanel();
     private boolean ok;
-    public ActionResponderCliente(LlistaUser llista){
+    public ActionResponderCliente(LlistaUser llista, JFrame frame, String nomM){
         frame = new JFrame("Responder peticion");
         info = new JLabel("-Introduce tu informacion personal-");
-        nomC = new JLabel("Introduce tu nombre de usuario: ");
-        nomFC = new JTextField(30);
-        nomFC.addActionListener( new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                nomUC= nomFC.getText();
-                if(!llista.usuarioRegistrado(nomUC))
-                    nomFC.setText("Introduce de nuevo el usuario.");
-            }
-        });
+        this.nomUC=nomM;
         nom = new JLabel("¿Cual es el usuario que enviaste una propuesta? ");
         nomF = new JTextField(30);
         nomF.addActionListener( new ActionListener() {
@@ -88,10 +80,9 @@ public class ActionResponderCliente extends JDialog {
         cont.add(botons, BorderLayout.SOUTH);
 
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        setSize(300,300);
-        frame.setVisible(true);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        pack();
+        setVisible(true);
     }
 
 }
